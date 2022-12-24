@@ -6,7 +6,7 @@ import { appRoutes } from "routes";
 
 export const App = () => {
   const mainRoutes = {
-    path: "/",
+    path: "/home",
     element: <MainLayout />,
     children: [
       { path: "*", element: <Navigate to="/404" /> },

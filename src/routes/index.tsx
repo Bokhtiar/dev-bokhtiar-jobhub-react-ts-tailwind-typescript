@@ -15,7 +15,9 @@ export const appRoutes = [
         element: <Navigate to="/404" />,
       },
       { path: "", element: <Home /> },
+
       { path: "products", element: <Products /> },
+      { path: "jobs", element: <Products /> },
     ],
   },
 ];
