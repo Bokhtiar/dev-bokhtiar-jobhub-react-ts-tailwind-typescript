@@ -11,6 +11,7 @@ import { Sidebar } from "pages/dashboard/layouts/sidebar";
 import { Applied_job } from "pages/dashboard/job/Applied_job";
 import { Your_job } from "pages/dashboard/job/Your_job";
 import { Dashboard } from "pages/dashboard";
+import { Login } from "pages/auth/Login";
 
 
 export const appRoutes = [
@@ -33,6 +34,9 @@ export const appRoutes = [
       // dashboard routes
       { path: "applied-job", element: <Applied_job /> },
       { path: "your-job", element: <Your_job /> },
+
+      //authentication
+      { path: "login", element: <Login /> },
     ],
   },
 ];

@@ -76,18 +76,18 @@ export const Header = () => {
               >
                 Sign in
               </a> */}
-              <a
-                href="#"
+              <Link
+                to="/register"
                 className="ml-2 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-8 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 py-6"
               >
                 Register
-              </a>
-              <a
-                href="#"
+              </Link>
+              <Link
+                to="/login"
                 className="ml-2 hover:bg-indigo-600 hover:text-white inline-flex items-center justify-center whitespace-nowrap rounded-md border border-blue-500 hover:border-transparent text-black px-8 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
               >
                 Login
-              </a>
+              </Link>
             </div>
           </div>
         </div>
