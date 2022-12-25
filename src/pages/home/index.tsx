@@ -1,14 +1,43 @@
 import { About } from "pages/about";
 import { Link } from "react-router-dom";
-import {Job} from "pages/job"
+import { Job } from "pages/job";
 import { Contact } from "pages/contact";
 
 export const Home = () => {
   return (
     <div>
-      <div className="mx-auto max-w-7xl px-4 ">
-        <div className="grid grid-cols-2 gap-1 my-40">
-          <div>
+      {/* slider area */}
+      <div className="bg-gray-200">
+        <div className=" grid grid-cols-2 gap-1 mx-auto max-w-7xl px-4">
+          <div className="my-48 ">
+            <div className="text-8xl font-bold">
+              Find the most exciting start new job
+            </div>
+            <div className="flex my-20">
+              <input
+                type="text"
+                className="py-4 p-4 rounded-sm"
+                name=""
+                id=""
+                placeholder="Job title or keyword"
+              />
+              <button
+                type="submit"
+                className="bg-blue-600 rounded-sm px-8 text-white"
+              >
+                FindJob
+              </button>
+            </div>
+          </div>
+          <div className="my-20 ml-32">
+            <img
+              src="https://www.jotabank.com.br/wp-content/uploads/2021/06/foto-homem-com-celular-1.png"
+              alt=""
+            />
+          </div>
+        </div>
+
+        {/* <div>
             <h1 className="text-5xl	text-blue-600">
               We offer modern solutions for growing your business
             </h1>
@@ -25,18 +54,15 @@ export const Home = () => {
               className="rounded-lg w-screen max-h-96"
               alt="..."
             />
-          </div>
-        </div>
+          </div> */}
+      </div>
 
+      <div className="mx-auto max-w-7xl px-4 ">
         {/* jobs post list */}
         <Job></Job>
 
         {/* about us */}
         <About></About>
-
-        {/* contact */}
-        <Contact></Contact>
-
       </div>
     </div>
   );

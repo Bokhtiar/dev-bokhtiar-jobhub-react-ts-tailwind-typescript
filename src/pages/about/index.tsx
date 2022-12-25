@@ -1,28 +1,38 @@
 export const About = () => {
-    return (
-        <div className="grid grid-cols-2 my-16">
-          <div className="bg-gray-100">
-            <div className="py-8 m-4">
-              <h2 className="text-blue-600 text-lg">WHO WE ARE</h2>
-              <h4 className="text-2xl text-orange-600">
-                Expedita voluptas omnis cupiditate totam eveniet nobis sint
-                iste. Dolores est repellat corrupti reprehenderit.
-              </h4>
-              <p className="py-2">
-                Quisquam vel ut sint cum eos hic dolores aperiam. Sed deserunt
-                et. Inventore et et dolor consequatur itaque ut voluptate sed
-                et. Magnam nam ipsum tenetur suscipit voluptatum nam et est
-                corrupti.
-              </p>
+  return (
+    <div className="mx-auto max-w-7xl px-4">
+      <div className="grid grid-cols-2 my-16">
+        <div className="mx-20 my-auto">
+          <h3 className="text-xl text-blue-600">WHAT WE ARE DOING</h3>
+          <h4 className="text-4xl font-bold text-gray-600 my-8">
+            24k Talented people are getting Jobs
+          </h4>
+          <p className="my-12">
+            Mollit anim laborum duis au dolor in voluptate velit ess cillum
+            dolore eu lore dsu quality mollit anim laborumuis au dolor in
+            voluptate velit cillum.
+          </p>
+          <p className="my-16 text-gray-600">
+            Mollit anim laborum.Duis aute irufg dhjkolohr in re voluptate velit
+            esscillumlore eu quife nrulla parihatur. Excghcepteur signjnt occa
+            cupidatat non inulpadeserunt mollit aboru. temnthp incididbnt ut
+            labore mollit anim laborum suis aute.
+          </p>
+          <button className="my-4 rounded bg-blue-600 px-8 py-4 text-white ">
+            <div className="flex">
+              <span>Post a job</span>
+              <span className="material-symbols-outlined">arrow_forward</span>
             </div>
-          </div>
-          <div>
-            <img
-              src="https://bootstrapmade.com/demo/templates/FlexStart/assets/img/about.jpg"
-              className="rounded-lg w-screen max-h-96 py-12 "
-              alt="..."
-            />
-          </div>
+          </button>
         </div>
-    )
-}
+        <div className="">
+          <img
+            className="rounded"
+            src="https://preview.colorlib.com/theme/jobfinderportal/assets/img/service/support-img.jpg"
+            alt=""
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
