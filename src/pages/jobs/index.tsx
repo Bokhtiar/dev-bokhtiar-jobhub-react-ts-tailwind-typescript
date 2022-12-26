@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export const Job = () => {
+export const JobIndex = () => {
   return (
     <section>
       <div className="mx-auto max-w-7xl px-4">
@@ -30,7 +30,10 @@ export const Job = () => {
             </div>
           </div>
           <div className="flex-auto w-8 m-4 text-center">
-            <Link to="job/1" className="px-8 py-1 text-sm text-gray-600 hover:bg-blue-400 hover:text-white rounded-full bg-transparent text-gray-700 font-semibold border border-gray-500">
+            <Link
+              to="job/1"
+              className="px-8 py-1 text-sm text-gray-600 hover:bg-blue-400 hover:text-white rounded-full bg-transparent text-gray-700 font-semibold border border-gray-500"
+            >
               Full time
             </Link>
             <br />

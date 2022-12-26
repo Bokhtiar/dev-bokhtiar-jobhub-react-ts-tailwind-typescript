@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-export const JobDetails = () => {
+export const JobShow = () => {
   return (
     <div className="mx-auto max-w-7xl px-4">
       <div className="grid grid-cols-3 gap-4">

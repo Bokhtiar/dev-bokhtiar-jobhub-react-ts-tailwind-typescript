@@ -1,46 +1,27 @@
 import { Navigate } from "react-router-dom";
 
-import { HomeLayout } from "layouts/home.layout";
+import { MainLayout } from "layouts/main.layout";
+// import { DashboardLayout } from "layouts/dashboard.layout";
 
 import { Home } from "pages/home";
-import { Products } from "pages/products";
-import {Job} from "pages/job"
+import { JobIndex } from "pages/jobs";
+import { JobShow } from "pages/jobs/show";
 import { About } from "pages/about";
 import { Contact } from "pages/contact";
-import { Sidebar } from "pages/dashboard/layouts/sidebar";
-import { Applied_job } from "pages/dashboard/job/Applied_job";
-import { Your_job } from "pages/dashboard/job/Your_job";
-import { Dashboard } from "pages/dashboard";
-import { Login } from "pages/auth/Login";
-import { Register } from "pages/auth/Register";
-import { JobDetails } from "pages/job/detail";
-
-
 export const appRoutes = [
   {
     path: "/",
-    element: <HomeLayout />,
+    element: <MainLayout />,
     children: [
       {
         path: "*",
         element: <Navigate to="/404" />,
       },
       { path: "", element: <Home /> },
-
-      { path: "products", element: <Products /> },
-      { path: "job", element: <Job /> },
+      { path: "jobs", element: <JobIndex /> },
+      { path: "jobs/:id", element: <JobShow /> },
       { path: "about", element: <About /> },
       { path: "contact", element: <Contact /> },
-      { path: "dashboard", element: <Dashboard /> },
-
-      // dashboard routes
-      { path: "applied-job", element: <Applied_job /> },
-      { path: "your-job", element: <Your_job /> },
-
-      //authentication
-      { path: "login", element: <Login /> },
-      { path: "register", element: <Register /> },
-      { path: "job/1", element: <JobDetails /> },
     ],
   },
 ];
