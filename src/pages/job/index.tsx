@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export const Job = () => {
   return (
     <section>
@@ -28,9 +30,9 @@ export const Job = () => {
             </div>
           </div>
           <div className="flex-auto w-8 m-4 text-center">
-            <button className="px-8 py-1 text-sm text-gray-600 hover:bg-blue-400 hover:text-white rounded-full bg-transparent text-gray-700 font-semibold border border-gray-500">
+            <Link to="job/1" className="px-8 py-1 text-sm text-gray-600 hover:bg-blue-400 hover:text-white rounded-full bg-transparent text-gray-700 font-semibold border border-gray-500">
               Full time
-            </button>
+            </Link>
             <br />
             <div className="mt-4 text-gray-600">7hours</div>
           </div>

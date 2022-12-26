@@ -12,6 +12,8 @@ import { Applied_job } from "pages/dashboard/job/Applied_job";
 import { Your_job } from "pages/dashboard/job/Your_job";
 import { Dashboard } from "pages/dashboard";
 import { Login } from "pages/auth/Login";
+import { Register } from "pages/auth/Register";
+import { JobDetails } from "pages/job/detail";
 
 
 export const appRoutes = [
@@ -37,6 +39,8 @@ export const appRoutes = [
 
       //authentication
       { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+      { path: "job/1", element: <JobDetails /> },
     ],
   },
 ];
