@@ -7,8 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        primary: "#fb246a",
+      backgroundImage: {
+        cvbackground: "url('assets/cv_bg.jpg')",
+        aboutbackground: "url('assets/about_bg.jpg')",
       },
     },
   },

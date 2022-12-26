@@ -21,7 +21,7 @@ export const PrimaryButton: React.FC<PropsTypes> = (
       onClick={props.onClick}
       size={props.size}
       color="primary"
-      className="text-white text-sm rounded-none px-8 capitalize font-normal"
+      className={`text-white text-sm rounded-none px-8 capitalize font-normal ${props.className}`}
     >
       {props.children}
     </Button>
@@ -40,7 +40,7 @@ export const PrimaryOutlineButton: React.FC<PropsTypes> = (
       size={props.size}
       color="primary"
       variant="outline"
-      className="text-white text-sm rounded-none px-8 capitalize font-normal"
+      className={`text-white text-sm rounded-none px-8 capitalize font-normal ${props.className}`}
     >
       {props.children}
     </Button>

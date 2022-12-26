@@ -4,9 +4,9 @@ import { Images } from "utils/images";
 import { Link } from "react-router-dom";
 import { PrimaryButton, PrimaryOutlineButton } from "components/button";
 
-export const MainNavbar = () => {
+export const MainNavbar: React.FC = (): JSX.Element => {
   return (
-    <div className="flex w-full p-3 items-center justify-center gap-2 fixed top-0 left-0 bg-white">
+    <div className="flex w-full p-3 items-center justify-center gap-2 fixed top-0 z-20 left-0 bg-white">
       <div className="w-full xl:w-3/4">
         <Navbar>
           <Navbar.Start>
@@ -28,10 +28,10 @@ export const MainNavbar = () => {
                 <Link to={"/"}>Home</Link>
               </Menu.Item>
               <Menu.Item>
-                <Link to={"/"}>Find a Job</Link>
+                <Link to={"/jobs"}>Find a Job</Link>
               </Menu.Item>
               <Menu.Item>
-                <Link to={"/"}>About</Link>
+                <Link to={"/about"}>About</Link>
               </Menu.Item>
             </Menu>
           </Navbar.Center>

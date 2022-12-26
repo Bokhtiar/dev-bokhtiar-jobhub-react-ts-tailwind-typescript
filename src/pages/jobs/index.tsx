@@ -1,212 +1,73 @@
-import { Link } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { IJobList } from "types/job.types";
+import { JobCard } from "components/job-card";
+import { NetworkServices } from "network";
+import { networkErrorHandeller } from "utils/helper";
+import { JobListPreloader } from "components/preloader";
+import { PrimaryOutlineButton } from "components/button";
 
-export const JobIndex = () => {
+export const JobIndex: React.FC = (): JSX.Element => {
+  const [data, setData] = useState<IJobList[] | []>([]);
+  const [isLoading, setLoading] = useState<boolean>(true);
+
+  /* Fetch data */
+  const fetchData = useCallback(async (page: number) => {
+    try {
+      const response = await NetworkServices.PublicJob.index({
+        page,
+        limit: 20,
+      });
+      if (response && response.status === 200) {
+        setData(response?.data?.data);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      if (error) {
+        setLoading(false);
+        networkErrorHandeller(error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData(1);
+  }, [fetchData]);
+
   return (
-    <section>
-      <div className="mx-auto max-w-7xl px-4">
-        <h2 className="text-center text-4xl my-24 font-bold">Featured Jobs</h2>
-
-        <div className="flex shadow-sm hover:shadow-md p-4">
-          <div className="flex-auto-16 m-4">
-            <img
-              src="https://preview.colorlib.com/theme/jobfinderportal/assets/img/icon/job-list2.png"
-              alt=""
-            />
-          </div>
-          <div className="flex-auto w-64 ml-8 m-4">
-            <h2 className="text-2xl text-blue-400">Digital Marketing</h2>
-            <div className="flex">
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">Ride Care ltd</p>
-              </div>
-
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">Ashulia saver dhaka</p>
-              </div>
-
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">$400-$500</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex-auto w-8 m-4 text-center">
-            <Link
-              to="job/1"
-              className="px-8 py-1 text-sm text-gray-600 hover:bg-blue-400 hover:text-white rounded-full bg-transparent text-gray-700 font-semibold border border-gray-500"
-            >
-              Full time
-            </Link>
-            <br />
-            <div className="mt-4 text-gray-600">7hours</div>
-          </div>
-        </div>
-
-        <div className="flex shadow-sm hover:shadow-md p-4">
-          <div className="flex-auto-16 m-4">
-            <img
-              src="https://preview.colorlib.com/theme/jobfinderportal/assets/img/icon/job-list2.png"
-              alt=""
-            />
-          </div>
-          <div className="flex-auto w-64 ml-8 m-4">
-            <h2 className="text-2xl text-blue-400">Digital Marketing</h2>
-            <div className="flex">
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">Ride Care ltd</p>
-              </div>
-
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">Ashulia saver dhaka</p>
-              </div>
-
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">$400-$500</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex-auto w-8 m-4 text-center">
-            <button className="px-8 py-1 text-sm text-gray-600 hover:bg-blue-400 hover:text-white rounded-full bg-transparent text-gray-700 font-semibold border border-gray-500">
-              Full time
-            </button>
-            <br />
-            <div className="mt-4 text-gray-600">7hours</div>
-          </div>
-        </div>
-
-        <div className="flex shadow-sm hover:shadow-md p-4">
-          <div className="flex-auto-16 m-4">
-            <img
-              src="https://preview.colorlib.com/theme/jobfinderportal/assets/img/icon/job-list2.png"
-              alt=""
-            />
-          </div>
-          <div className="flex-auto w-64 ml-8 m-4">
-            <h2 className="text-2xl text-blue-400">Digital Marketing</h2>
-            <div className="flex">
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">Ride Care ltd</p>
-              </div>
-
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">Ashulia saver dhaka</p>
-              </div>
-
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">$400-$500</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex-auto w-8 m-4 text-center">
-            <button className="px-8 py-1 text-sm text-gray-600 hover:bg-blue-400 hover:text-white rounded-full bg-transparent text-gray-700 font-semibold border border-gray-500">
-              Full time
-            </button>
-            <br />
-            <div className="mt-4 text-gray-600">7hours</div>
-          </div>
-        </div>
-
-        <div className="flex shadow-sm hover:shadow-md p-4">
-          <div className="flex-auto-16 m-4">
-            <img
-              src="https://preview.colorlib.com/theme/jobfinderportal/assets/img/icon/job-list2.png"
-              alt=""
-            />
-          </div>
-          <div className="flex-auto w-64 ml-8 m-4">
-            <h2 className="text-2xl text-blue-400">Digital Marketing</h2>
-            <div className="flex">
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">Ride Care ltd</p>
-              </div>
-
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">Ashulia saver dhaka</p>
-              </div>
-
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">$400-$500</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex-auto w-8 m-4 text-center">
-            <button className="px-8 py-1 text-sm text-gray-600 hover:bg-blue-400 hover:text-white rounded-full bg-transparent text-gray-700 font-semibold border border-gray-500">
-              Full time
-            </button>
-            <br />
-            <div className="mt-4 text-gray-600">7hours</div>
-          </div>
-        </div>
-
-        <div className="flex shadow-sm hover:shadow-md p-4">
-          <div className="flex-auto-16 m-4">
-            <img
-              src="https://preview.colorlib.com/theme/jobfinderportal/assets/img/icon/job-list2.png"
-              alt=""
-            />
-          </div>
-          <div className="flex-auto w-64 ml-8 m-4">
-            <h2 className="text-2xl text-blue-400">Digital Marketing</h2>
-            <div className="flex">
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">Ride Care ltd</p>
-              </div>
-
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">Ashulia saver dhaka</p>
-              </div>
-
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">$400-$500</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex-auto w-8 m-4 text-center">
-            <button className="px-8 py-1 text-sm text-gray-600 hover:bg-blue-400 hover:text-white rounded-full bg-transparent text-gray-700 font-semibold border border-gray-500">
-              Full time
-            </button>
-            <br />
-            <div className="mt-4 text-gray-600">7hours</div>
-          </div>
-        </div>
-
-        <div className="flex shadow-sm hover:shadow-md p-4">
-          <div className="flex-auto-16 m-4">
-            <img
-              src="https://preview.colorlib.com/theme/jobfinderportal/assets/img/icon/job-list2.png"
-              alt=""
-            />
-          </div>
-          <div className="flex-auto w-64 ml-8 m-4">
-            <h2 className="text-2xl text-blue-400">Digital Marketing</h2>
-            <div className="flex">
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">Ride Care ltd</p>
-              </div>
-
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">Ashulia saver dhaka</p>
-              </div>
-
-              <div className="flex-auto w-14">
-                <p className="mt-4 text-gray-500">$400-$500</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex-auto w-8 m-4 text-center">
-            <button className="px-8 py-1 text-sm text-gray-600 hover:bg-blue-400 hover:text-white rounded-full bg-transparent text-gray-700 font-semibold border border-gray-500">
-              Full time
-            </button>
-            <br />
-            <div className="mt-4 text-gray-600">7hours</div>
-          </div>
-        </div>
-
-        <div className="text-center my-24">
-          <button className="rounded-full bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent">
-            Load more...
-          </button>
+    <div>
+      {/* Header */}
+      <div className="w-full h-[260px] lg:h-[450px] overflow-hidden bg-aboutbackground bg-no-repeat bg-cover">
+        <div className="w-full h-full bg-primary opacity-80 p-4 text-center grid place-items-center">
+          <p className="text-white font-bold text-3xl lg:text-5xl">
+            Get Your Job
+          </p>
         </div>
       </div>
-    </section>
+
+      {/* jobs */}
+      <div className="w-full lg:w-3/4 mx-auto py-20 lg:py-24 px-4 lg:px-0">
+        <div>
+          <p className="text-base text-gray-500 mb-4">
+            {!isLoading && !data.length ? 0 : data.length} Active jobs found
+          </p>
+        </div>
+
+        {isLoading && !data.length ? <JobListPreloader /> : null}
+
+        {!isLoading && data.length
+          ? data.map((item, i) => {
+              return <JobCard key={i} {...item} />;
+            })
+          : null}
+
+        {!isLoading && data.length ? (
+          <div className="text-center pt-6">
+            <PrimaryOutlineButton type="button" size="lg" className="!px-12">
+              Load More ...
+            </PrimaryOutlineButton>
+          </div>
+        ) : null}
+      </div>
+    </div>
   );
 };
