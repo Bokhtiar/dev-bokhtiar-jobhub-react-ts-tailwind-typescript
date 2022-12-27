@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        danger: "#EB1D36",
+      },
       backgroundImage: {
         cvbackground: "url('assets/cv_bg.jpg')",
         aboutbackground: "url('assets/about_bg.jpg')",

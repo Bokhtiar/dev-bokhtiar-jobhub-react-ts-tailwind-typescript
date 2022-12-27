@@ -1,27 +1,40 @@
 import { Navigate } from "react-router-dom";
+import { getToken } from "utils/helper";
 
-import { MainLayout } from "layouts/main.layout";
-// import { DashboardLayout } from "layouts/dashboard.layout";
+import { DashboardLayout } from "layouts/dashboard.layout";
+import { Dashboard } from "pages/dashboard";
+import { ProfileEdit } from "pages/dashboard/edit";
+import { ResumrIndex } from "pages/dashboard/resume";
+import { JobIndex } from "pages/dashboard/jobs";
+import { JobCreate } from "pages/dashboard/jobs/create";
+import { JobShow } from "pages/dashboard/jobs/show";
+import { ApplicationIndex } from "pages/dashboard/applications";
+import { ChangePassword } from "pages/dashboard/change-password";
 
-import { Home } from "pages/home";
-import { JobIndex } from "pages/jobs";
-import { JobShow } from "pages/jobs/show";
-import { About } from "pages/about";
-import { Contact } from "pages/contact";
-export const appRoutes = [
+const appRoutes = [
   {
-    path: "/",
-    element: <MainLayout />,
+    path: "dashboard",
+    element: <DashboardLayout />,
     children: [
-      {
-        path: "*",
-        element: <Navigate to="/404" />,
-      },
-      { path: "", element: <Home /> },
+      { path: "*", element: <Navigate to="/404" /> },
+      { path: "", element: <Dashboard /> },
+      { path: "edit", element: <ProfileEdit /> },
+      { path: "resume", element: <ResumrIndex /> },
       { path: "jobs", element: <JobIndex /> },
-      { path: "jobs/:id", element: <JobShow /> },
-      { path: "about", element: <About /> },
-      { path: "contact", element: <Contact /> },
+      { path: "jobs/create", element: <JobCreate /> },
+      { path: "jobs/show/:id", element: <JobShow /> },
+      { path: "applications", element: <ApplicationIndex /> },
+      { path: "change-password", element: <ChangePassword /> },
     ],
   },
 ];
+
+/* Generate permitted routes */
+export const permittedRoutes = () => {
+  const token = getToken();
+  if (token) {
+    return appRoutes;
+  }
+
+  return [];
+};

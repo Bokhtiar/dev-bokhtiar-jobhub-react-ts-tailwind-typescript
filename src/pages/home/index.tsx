@@ -48,7 +48,7 @@ export const Home: React.FC = (): JSX.Element => {
           </p>
         </div>
 
-        {isLoading && !data.length ? <JobListPreloader /> : null}
+        {isLoading && !data.length ? <JobListPreloader count={4} /> : null}
         {!isLoading && !data.length ? (
           <div className="text-center">
             <p className="text-gray-400 text-lg font-bold">

@@ -5,6 +5,8 @@ import Support from "assets/support.jpg";
 import Four0Four from "assets/404.png";
 import Five0One from "assets/501.png";
 import NoContent from "assets/204.png";
+import Avatar from "assets/avatar.png";
+import Resume from "assets/resume.png";
 
 export const Images = {
   Logo,
@@ -14,4 +16,6 @@ export const Images = {
   Four0Four,
   Five0One,
   NoContent,
+  Avatar,
+  Resume,
 };

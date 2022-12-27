@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
+import { NetworkServices } from "network";
 import { IJobList } from "types/job.types";
 import { JobCard } from "components/job-card";
-import { NetworkServices } from "network";
 import { networkErrorHandeller } from "utils/helper";
 import { JobListPreloader } from "components/preloader";
 import { PrimaryOutlineButton } from "components/button";
 
 export const JobIndex: React.FC = (): JSX.Element => {
+  const [page, setPage] = useState<number>(1);
   const [data, setData] = useState<IJobList[] | []>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
+  const [isMoreLoading, setMoreLoading] = useState<boolean>(false);
 
   /* Fetch data */
   const fetchData = useCallback(async (page: number) => {
@@ -18,7 +20,7 @@ export const JobIndex: React.FC = (): JSX.Element => {
         limit: 20,
       });
       if (response && response.status === 200) {
-        setData(response?.data?.data);
+        setData((prevData) => [...prevData, ...response?.data?.data]);
       }
       setLoading(false);
     } catch (error: any) {
@@ -32,6 +34,14 @@ export const JobIndex: React.FC = (): JSX.Element => {
   useEffect(() => {
     fetchData(1);
   }, [fetchData]);
+
+  /* Load more handeller */
+  const loadMore = async () => {
+    setMoreLoading(true);
+    setPage(page + 1);
+    await fetchData(page + 1);
+    setMoreLoading(false);
+  };
 
   return (
     <div>
@@ -52,7 +62,7 @@ export const JobIndex: React.FC = (): JSX.Element => {
           </p>
         </div>
 
-        {isLoading && !data.length ? <JobListPreloader /> : null}
+        {isLoading && !data.length ? <JobListPreloader count={5} /> : null}
 
         {!isLoading && data.length
           ? data.map((item, i) => {
@@ -62,8 +72,14 @@ export const JobIndex: React.FC = (): JSX.Element => {
 
         {!isLoading && data.length ? (
           <div className="text-center pt-6">
-            <PrimaryOutlineButton type="button" size="lg" className="!px-12">
-              Load More ...
+            <PrimaryOutlineButton
+              type="button"
+              size="lg"
+              className="!px-12"
+              onClick={loadMore}
+              disabled={isMoreLoading}
+            >
+              {isMoreLoading ? "Loading ..." : "Load More ..."}
             </PrimaryOutlineButton>
           </div>
         ) : null}

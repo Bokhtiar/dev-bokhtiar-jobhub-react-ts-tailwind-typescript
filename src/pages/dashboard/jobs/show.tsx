@@ -5,9 +5,8 @@ import { NoContent } from "components/204";
 import { useParams } from "react-router-dom";
 import { NetworkError } from "components/501";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { PrimaryButton } from "components/button";
-import { networkErrorHandeller, dateparse } from "utils/helper";
 import { JobListPreloader } from "components/preloader";
+import { networkErrorHandeller, dateparse } from "utils/helper";
 
 export const JobShow: React.FC = (): JSX.Element => {
   const { id } = useParams();
@@ -18,7 +17,7 @@ export const JobShow: React.FC = (): JSX.Element => {
   /* Fetch data */
   const fetchData = useCallback(async () => {
     try {
-      const response = await NetworkServices.PublicJob.show({ id: id || "" });
+      const response = await NetworkServices.PrivateJob.show(id || "");
       if (response && response.status === 200) {
         setData(response?.data?.data);
       }
@@ -37,47 +36,41 @@ export const JobShow: React.FC = (): JSX.Element => {
   }, [fetchData]);
 
   return (
-    <div>
-      {/* Header */}
-      <div className="w-full h-[260px] lg:h-[450px] overflow-hidden bg-aboutbackground bg-no-repeat bg-cover">
-        <div className="w-full h-full bg-primary opacity-80 p-4 text-center grid place-items-center">
-          <p className="text-white font-bold text-3xl lg:text-5xl">
-            {data?.title || ""}
-          </p>
-        </div>
-      </div>
+    <div className="p-6 bg-white rounded-lg">
+      <p className="text-gray-700 text-2xl lg:text-3xl mb-1">Job information</p>
+      <p className="text-gray-400 text-sm mb-8 xl:mb-10">All details of job.</p>
 
       {/* Pre-loader handeller */}
       {isLoading && !serverError && !data ? (
-        <div className="w-full lg:w-3/4 mx-auto py-20 lg:py-24 px-4 lg:px-0 text-center">
+        <div className="text-center">
           <JobListPreloader count={1} />
         </div>
       ) : null}
 
       {/* Network error handeller */}
       {!isLoading && !data && serverError ? (
-        <div className="w-full lg:w-3/4 mx-auto py-20 lg:py-24 px-4 lg:px-0 text-center">
+        <div className="text-center">
           <NetworkError />
         </div>
       ) : null}
 
       {/* No content handeller */}
       {!isLoading && !data && !serverError ? (
-        <div className="w-full lg:w-3/4 mx-auto py-20 lg:py-24 px-4 lg:px-0 text-center">
+        <div className="text-center">
           <NoContent message="Job not found." />
         </div>
       ) : null}
 
       {/* job detials */}
       {!isLoading && !serverError && data ? (
-        <div className="w-full lg:w-3/4 mx-auto py-20 lg:py-24 px-4 lg:px-0">
-          <div className="lg:flex gap-8">
+        <div>
+          <div className="xl:flex gap-8">
             {/* Job card & description */}
-            <div className="grow mb-6 lg:mb-0">
+            <div className="grow mb-6 xl:mb-0">
               {/* Job card */}
-              <div className="p-6 lg:p-7 mb-8 rounded-lg bg-white w-full">
-                <div className="lg:flex gap-7">
-                  <div className="flex-none mb-6 lg:mb-0">
+              <div className="mb-8 rounded-lg bg-white w-full">
+                <div className="xl:flex gap-7">
+                  <div className="flex-none mb-6 xl:mb-0">
                     <img
                       src={data.company_logo}
                       alt="Company logo"
@@ -85,11 +78,11 @@ export const JobShow: React.FC = (): JSX.Element => {
                     />
                   </div>
                   <div className="grow">
-                    <p className="text-gray-600 text-2xl font-normal transition-all hover:text-primary mb-4">
+                    <p className="text-gray-600 text-xl font-normal transition-all hover:text-primary mb-4">
                       {data.title}
                     </p>
-                    <div className="lg:flex lg:justify-start lg:gap-6">
-                      <p className="text-gray-400 mb-2 lg:mb-0">
+                    <div className="xl:flex xl:justify-start xl:gap-6">
+                      <p className="text-gray-400 text-sm mb-2 xl:mb-0">
                         {data.company_name}
                       </p>
                       <div className="inline-flex">
@@ -97,11 +90,11 @@ export const JobShow: React.FC = (): JSX.Element => {
                           size={16}
                           className="text-gray-400 mt-[2px]"
                         />
-                        <p className="text-gray-400 mb-2 lg:mb-0 ml-1">
+                        <p className="text-gray-400 text-sm mb-2 xl:mb-0 ml-1">
                           {data.location}
                         </p>
                       </div>
-                      <p className="text-gray-400 ">
+                      <p className="text-gray-400 text-sm">
                         TK {data.start_salary} - {data.end_salary}
                       </p>
                     </div>
@@ -112,28 +105,26 @@ export const JobShow: React.FC = (): JSX.Element => {
               {/* Job description */}
               <p className="text-gray-900 text-lg mb-5">Job Description</p>
 
-              <div className="text-gray-600 text-base leading-loose">
+              <div className="text-gray-600 text-sm leading-loose">
                 <p>{data.description}</p>
               </div>
             </div>
 
             {/* Job Overview & company details */}
-            <div className="flex-none w-full lg:!w-80 xl:!w-96">
+            <div className="flex-none w-full xl:!w-[350px]">
               {/* Job Overview */}
               <div className="border p-6 mb-12">
                 <p className="text-gray-800 text-lg mb-5">Job Overview</p>
                 <div className="flex justify-between mb-3">
-                  <div>
+                  <div className="w-[120px]">
                     <p className="text-gray-800 text-sm mb-3">Posted date :</p>
                     <p className="text-gray-800 text-sm mb-3">Location :</p>
                     <p className="text-gray-800 text-sm mb-3">Vacancy :</p>
                     <p className="text-gray-800 text-sm mb-3">Job nature :</p>
                     <p className="text-gray-800 text-sm mb-3">Salary :</p>
-                    <p className="text-gray-800 text-sm mb-3">
-                      Application date :
-                    </p>
+                    <p className="text-gray-800 text-sm">Application date :</p>
                   </div>
-                  <div>
+                  <div className="text-end">
                     <p className="text-gray-800 text-sm mb-3">
                       {dateparse(data.createdAt)}
                     </p>
@@ -148,15 +139,11 @@ export const JobShow: React.FC = (): JSX.Element => {
                       TK {data.start_salary} - {data.end_salary}{" "}
                       <span className="capitalize">{data.salary_type}</span>
                     </p>
-                    <p className="text-gray-800 text-sm mb-3">
+                    <p className="text-gray-800 text-sm">
                       {dateparse(data.expired_at)}
                     </p>
                   </div>
                 </div>
-
-                <PrimaryButton type="button" size="md">
-                  Apply Now
-                </PrimaryButton>
               </div>
 
               {/* Company details */}
