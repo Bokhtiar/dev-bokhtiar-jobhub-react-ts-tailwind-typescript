@@ -7,3 +7,8 @@ export const index = async (reqParams: PaginationParamsTypes) => {
     params: { ...reqParams },
   });
 };
+
+/* Show specific resource */
+export const show = async (id: string) => {
+  return await privateRequest.get(`/api/v1/user/application/${id}`);
+};

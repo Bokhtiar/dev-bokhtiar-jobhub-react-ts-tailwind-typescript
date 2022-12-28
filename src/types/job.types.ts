@@ -34,3 +34,22 @@ export interface IJob {
   __v: number;
 }
 
+interface CreatedBy {
+  _id: string;
+  name: string;
+  profile_image: string;
+}
+
+export interface ICommentList {
+  _id: string;
+  created_by: CreatedBy;
+  job: string;
+  description: string;
+  createdAt: string;
+  __v: number;
+}
+
+export interface IJobStatus {
+  id: string;
+  status: string;
+}

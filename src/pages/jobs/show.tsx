@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import { IJob } from "types/job.types";
+import { ICommentList, IJob } from "types/job.types";
 import { NetworkServices } from "network";
 import { NoContent } from "components/204";
 import { useParams } from "react-router-dom";
+import { Comment } from "components/comment";
 import { NetworkError } from "components/501";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { PrimaryButton } from "components/button";
@@ -12,6 +13,7 @@ import { JobListPreloader } from "components/preloader";
 export const JobShow: React.FC = (): JSX.Element => {
   const { id } = useParams();
   const [data, setData] = useState<IJob | null>(null);
+  const [comments, setComments] = useState<ICommentList[] | []>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [serverError, setServerError] = useState<boolean>(false);
 
@@ -19,8 +21,17 @@ export const JobShow: React.FC = (): JSX.Element => {
   const fetchData = useCallback(async () => {
     try {
       const response = await NetworkServices.PublicJob.show({ id: id || "" });
-      if (response && response.status === 200) {
+      const commentResponse = await NetworkServices.PublicJob.comments({
+        id: id || "",
+      });
+      if (
+        response &&
+        commentResponse &&
+        response.status === 200 &&
+        commentResponse.status === 200
+      ) {
         setData(response?.data?.data);
+        setComments(commentResponse?.data?.data);
       }
       setLoading(false);
     } catch (error: any) {
@@ -199,6 +210,18 @@ export const JobShow: React.FC = (): JSX.Element => {
           </div>
         </div>
       ) : null}
+
+      {/* Comments */}
+      <div className="w-full lg:w-3/4 mx-auto pb-20 lg:pb-24 px-4 lg:px-0">
+        <p className="text-gray-400 font-bold">
+          Comments ({comments?.length || 0})
+        </p>
+        {!isLoading && !serverError && comments
+          ? comments.map((item, i) => {
+              return <Comment key={i} data={item} />;
+            })
+          : null}
+      </div>
     </div>
   );
 };

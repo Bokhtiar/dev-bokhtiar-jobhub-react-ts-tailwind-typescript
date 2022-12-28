@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { ICommentList, IJob } from "types/job.types";
+import { ICommentList } from "types/job.types";
+import { IApplication } from "types/application.types";
 import { NetworkServices } from "network";
 import { NoContent } from "components/204";
 import { Comment } from "components/comment";
@@ -9,9 +10,9 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { JobListPreloader } from "components/preloader";
 import { networkErrorHandeller, dateparse } from "utils/helper";
 
-export const JobShow: React.FC = (): JSX.Element => {
+export const ApplicationShow: React.FC = (): JSX.Element => {
   const { id } = useParams();
-  const [data, setData] = useState<IJob | null>(null);
+  const [data, setData] = useState<IApplication | null>(null);
   const [comments, setComments] = useState<ICommentList[] | []>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [serverError, setServerError] = useState<boolean>(false);
@@ -19,7 +20,7 @@ export const JobShow: React.FC = (): JSX.Element => {
   /* Fetch data */
   const fetchData = useCallback(async () => {
     try {
-      const response = await NetworkServices.PrivateJob.show(id || "");
+      const response = await NetworkServices.PrivateApplication.show(id || "");
       const commentResponse = await NetworkServices.PrivateJob.comments(
         id || ""
       );
@@ -48,8 +49,12 @@ export const JobShow: React.FC = (): JSX.Element => {
 
   return (
     <div className="p-6 bg-white rounded-lg">
-      <p className="text-gray-700 text-2xl lg:text-3xl mb-1">Job information</p>
-      <p className="text-gray-400 text-sm mb-8 xl:mb-10">All details of job.</p>
+      <p className="text-gray-700 text-2xl lg:text-3xl mb-1">
+        Application information
+      </p>
+      <p className="text-gray-400 text-sm mb-8 xl:mb-10">
+        All details of application.
+      </p>
 
       {/* Pre-loader handeller */}
       {isLoading && !serverError && !data ? (
@@ -82,18 +87,18 @@ export const JobShow: React.FC = (): JSX.Element => {
               <div className="xl:flex gap-7">
                 <div className="flex-none mb-6 xl:mb-0">
                   <img
-                    src={data.company_logo}
+                    src={data.job.company_logo}
                     alt="Company logo"
                     className="w-[85px] h-[85px]"
                   />
                 </div>
                 <div className="grow">
                   <p className="text-gray-600 text-xl font-normal transition-all hover:text-primary mb-4">
-                    {data.title}
+                    {data.job.title}
                   </p>
                   <div className="xl:flex xl:justify-start xl:gap-6">
                     <p className="text-gray-400 text-sm mb-2 xl:mb-0">
-                      {data.company_name}
+                      {data.job.company_name}
                     </p>
                     <div className="inline-flex">
                       <FaMapMarkerAlt
@@ -101,11 +106,11 @@ export const JobShow: React.FC = (): JSX.Element => {
                         className="text-gray-400 mt-[2px]"
                       />
                       <p className="text-gray-400 text-sm mb-2 xl:mb-0 ml-1">
-                        {data.location}
+                        {data.job.location}
                       </p>
                     </div>
                     <p className="text-gray-400 text-sm">
-                      TK {data.start_salary} - {data.end_salary}
+                      TK {data.job.start_salary} - {data.job.end_salary}
                     </p>
                   </div>
                 </div>
@@ -116,7 +121,7 @@ export const JobShow: React.FC = (): JSX.Element => {
             <p className="text-gray-900 text-lg mb-5">Job Description</p>
 
             <div className="text-gray-600 text-sm leading-loose">
-              <p>{data.description}</p>
+              <p>{data.job.description}</p>
             </div>
           </div>
 
@@ -132,22 +137,32 @@ export const JobShow: React.FC = (): JSX.Element => {
                   <p className="text-gray-800 text-sm mb-3">Vacancy :</p>
                   <p className="text-gray-800 text-sm mb-3">Job nature :</p>
                   <p className="text-gray-800 text-sm mb-3">Salary :</p>
-                  <p className="text-gray-800 text-sm">Application date :</p>
+                  <p className="text-gray-800 text-sm mb-3">
+                    Application date :
+                  </p>
+                  <p className="text-gray-800 text-sm">Application status :</p>
                 </div>
                 <div className="text-end">
                   <p className="text-gray-800 text-sm mb-3">
                     {dateparse(data.createdAt)}
                   </p>
-                  <p className="text-gray-800 text-sm mb-3">{data.location}</p>
-                  <p className="text-gray-800 text-sm mb-3">{data.vacancy}</p>
-                  <p className="text-gray-800 text-sm mb-3">{data.job_type}</p>
                   <p className="text-gray-800 text-sm mb-3">
-                    TK {data.start_salary} - {data.end_salary}{" "}
-                    <span className="capitalize">{data.salary_type}</span>
+                    {data.job.location}
                   </p>
-                  <p className="text-gray-800 text-sm">
-                    {dateparse(data.expired_at)}
+                  <p className="text-gray-800 text-sm mb-3">
+                    {data.job.vacancy}
                   </p>
+                  <p className="text-gray-800 text-sm mb-3">
+                    {data.job.job_type}
+                  </p>
+                  <p className="text-gray-800 text-sm mb-3">
+                    TK {data.job.start_salary} - {data.job.end_salary}{" "}
+                    <span className="capitalize">{data.job.salary_type}</span>
+                  </p>
+                  <p className="text-gray-800 text-sm mb-3">
+                    {dateparse(data.job.expired_at)}
+                  </p>
+                  <p className="text-gray-800 text-sm">{data.status}</p>
                 </div>
               </div>
             </div>
@@ -156,10 +171,10 @@ export const JobShow: React.FC = (): JSX.Element => {
             <div>
               <p className="text-gray-800 text-lg mb-4">Company Information</p>
               <p className="text-gray-800 text-lg font-bold mb-4 capitalize">
-                {data.company_name}
+                {data.job.company_name}
               </p>
               <p className="text-gray-800 text-sm leading-loose mb-4">
-                {data.company_short_description}
+                {data.job.company_short_description}
               </p>
               <div className="flex">
                 <div className="w-[70px]">
@@ -173,13 +188,13 @@ export const JobShow: React.FC = (): JSX.Element => {
                 </div>
                 <div className="grow">
                   <p className="text-gray-800 text-sm mb-2">
-                    {data.company_name}
+                    {data.job.company_name}
                   </p>
                   <p className="text-gray-800 text-sm mb-2 lowercase">
-                    {data.company_website}
+                    {data.job.company_website}
                   </p>
                   <p className="text-gray-800 text-sm mb-2">
-                    {data.company_email_address}
+                    {data.job.company_email_address}
                   </p>
                 </div>
               </div>

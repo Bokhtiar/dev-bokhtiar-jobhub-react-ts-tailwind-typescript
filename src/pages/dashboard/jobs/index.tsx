@@ -110,7 +110,7 @@ export const JobIndex: React.FC = (): JSX.Element => {
               <MdRemoveRedEye size={18} />
             </PrimaryOutlineButton>
           </Link>
-          <Link to={`/dashboard/jobs/${row._id}/applicants`}>
+          <Link to={`/dashboard/jobs/applicants/${row._id}`}>
             <PrimaryOutlineButton
               type="button"
               size="md"

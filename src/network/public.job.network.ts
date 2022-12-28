@@ -27,3 +27,4 @@ export const search = async ({ query }: { query: string }) => {
 export const comments = async ({ id }: { id: string }) => {
   return await publicRequest.get(`/api/v1/public/comments/${id}`);
 };
+
