@@ -5,31 +5,40 @@ import { JobCard } from "components/job-card";
 import { networkErrorHandeller } from "utils/helper";
 import { JobListPreloader } from "components/preloader";
 import { PrimaryOutlineButton } from "components/button";
+import { useSearchParams } from "react-router-dom";
 
 export const JobIndex: React.FC = (): JSX.Element => {
+  const [searchParams] = useSearchParams();
   const [page, setPage] = useState<number>(1);
   const [data, setData] = useState<IJobList[] | []>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [isMoreLoading, setMoreLoading] = useState<boolean>(false);
 
   /* Fetch data */
-  const fetchData = useCallback(async (page: number) => {
-    try {
-      const response = await NetworkServices.PublicJob.index({
-        page,
-        limit: 20,
-      });
-      if (response && response.status === 200) {
-        setData((prevData) => [...prevData, ...response?.data?.data]);
-      }
-      setLoading(false);
-    } catch (error: any) {
-      if (error) {
+  const fetchData = useCallback(
+    async (page: number) => {
+      try {
+        let queryParams: any = {};
+        queryParams.page = page;
+        queryParams.limit = 20;
+        if (searchParams.get("query")) {
+          queryParams.query = searchParams.get("query");
+        }
+
+        const response = await NetworkServices.PublicJob.index(queryParams);
+        if (response && response.status === 200) {
+          setData((prevData) => [...prevData, ...response?.data?.data]);
+        }
         setLoading(false);
-        networkErrorHandeller(error);
+      } catch (error: any) {
+        if (error) {
+          setLoading(false);
+          networkErrorHandeller(error);
+        }
       }
-    }
-  }, []);
+    },
+    [searchParams]
+  );
 
   useEffect(() => {
     fetchData(1);
@@ -70,7 +79,7 @@ export const JobIndex: React.FC = (): JSX.Element => {
             })
           : null}
 
-        {!isLoading && data.length ? (
+        {!isLoading && data.length && !searchParams.get("query") ? (
           <div className="text-center pt-6">
             <PrimaryOutlineButton
               type="button"

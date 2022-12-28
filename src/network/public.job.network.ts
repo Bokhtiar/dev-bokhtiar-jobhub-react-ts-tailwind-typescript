@@ -1,16 +1,15 @@
 import { publicRequest } from "config/axios.config";
 
 /* Show list of resources */
-export const index = async ({
-  page,
-  limit,
-}: {
+export type IndexParamsTypes = {
   page: number;
   limit: number;
-}) => {
-  return await publicRequest.get(
-    `/api/v1/public/jobs?page=${page}&limit=${limit}`
-  );
+  query?: string;
+};
+export const index = async (reqParams: IndexParamsTypes) => {
+  return await publicRequest.get(`/api/v1/public/jobs`, {
+    params: { ...reqParams },
+  });
 };
 
 /* Show specifi resource */
@@ -18,13 +17,7 @@ export const show = async ({ id }: { id: string }) => {
   return await publicRequest.get(`/api/v1/public/jobs/${id}`);
 };
 
-/* Search list of resources */
-export const search = async ({ query }: { query: string }) => {
-  return await publicRequest.get(`/api/v1/public/jobs?query=${query}`);
-};
-
 /* Comment list of resources */
 export const comments = async ({ id }: { id: string }) => {
   return await publicRequest.get(`/api/v1/public/comments/${id}`);
 };
-

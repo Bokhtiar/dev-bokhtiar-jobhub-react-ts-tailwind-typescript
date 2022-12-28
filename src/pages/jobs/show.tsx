@@ -2,20 +2,25 @@ import { useCallback, useEffect, useState } from "react";
 import { ICommentList, IJob } from "types/job.types";
 import { NetworkServices } from "network";
 import { NoContent } from "components/204";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Comment } from "components/comment";
 import { NetworkError } from "components/501";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { PrimaryButton } from "components/button";
-import { networkErrorHandeller, dateparse } from "utils/helper";
+import { networkErrorHandeller, dateparse, getToken } from "utils/helper";
 import { JobListPreloader } from "components/preloader";
+import { CommentForm } from "components/form/comment.form";
+import { Toastify } from "components/toastify";
 
 export const JobShow: React.FC = (): JSX.Element => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [data, setData] = useState<IJob | null>(null);
   const [comments, setComments] = useState<ICommentList[] | []>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [serverError, setServerError] = useState<boolean>(false);
+  const [isCommentLoading, setCommentLoading] = useState<boolean>(false);
+  const [isApply, setApply] = useState<boolean>(false);
 
   /* Fetch data */
   const fetchData = useCallback(async () => {
@@ -45,7 +50,58 @@ export const JobShow: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [id, fetchData]);
+
+  /* handle comment submit */
+  const handleCommentSubmit = async (data: any) => {
+    try {
+      const token = await getToken();
+      if (!token) {
+        navigate("/login");
+      }
+
+      setCommentLoading(true);
+      const formData = {
+        ...data,
+        job: id,
+      };
+
+      const response = await NetworkServices.PrivateComment.store(formData);
+      if (response && response.status === 201) {
+        Toastify.Success(response.data.message);
+      }
+      setLoading(true);
+      setData(null);
+      fetchData();
+      setCommentLoading(false);
+    } catch (error: any) {
+      if (error) {
+        setCommentLoading(false);
+        networkErrorHandeller(error);
+      }
+    }
+  };
+
+  /* handle apply to job */
+  const handleApply = async () => {
+    try {
+      setApply(true);
+      const response = await NetworkServices.PrivateJob.apply({
+        job: id || "",
+      });
+
+      if (response && response.status === 201) {
+        Toastify.Success(response.data.message);
+      }
+
+      setApply(false);
+    } catch (error: any) {
+      if (error) {
+        setApply(false);
+        networkErrorHandeller(error);
+      }
+    }
+  };
 
   return (
     <div>
@@ -165,8 +221,13 @@ export const JobShow: React.FC = (): JSX.Element => {
                   </div>
                 </div>
 
-                <PrimaryButton type="button" size="md">
-                  Apply Now
+                <PrimaryButton
+                  type="button"
+                  size="md"
+                  disabled={isApply}
+                  onClick={handleApply}
+                >
+                  {isApply ? "Applying..." : "Apply Now"}
                 </PrimaryButton>
               </div>
 
@@ -212,7 +273,7 @@ export const JobShow: React.FC = (): JSX.Element => {
       ) : null}
 
       {/* Comments */}
-      <div className="w-full lg:w-3/4 mx-auto pb-20 lg:pb-24 px-4 lg:px-0">
+      <div className="w-full lg:w-3/4 mx-auto pb-8 px-4 lg:px-0">
         <p className="text-gray-400 font-bold">
           Comments ({comments?.length || 0})
         </p>
@@ -222,6 +283,18 @@ export const JobShow: React.FC = (): JSX.Element => {
             })
           : null}
       </div>
+
+      {/* Comment post box */}
+      {!isLoading && !serverError && data && id ? (
+        <div className="w-full lg:w-3/4 mx-auto pb-20 lg:pb-24 px-4 lg:px-0">
+          <div className="w-full md:w-[600px]">
+            <CommentForm
+              loading={isCommentLoading}
+              onSubmit={(data) => handleCommentSubmit(data)}
+            />
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };

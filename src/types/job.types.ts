@@ -34,6 +34,24 @@ export interface IJob {
   __v: number;
 }
 
+export interface IJobCreate {
+  company_name: string;
+  company_logo: string;
+  company_short_description: string;
+  company_website: string;
+  company_email_address: string;
+  title: string;
+  category: string;
+  location: string;
+  job_type: string;
+  salary_type: string;
+  start_salary: number;
+  end_salary: number;
+  vacancy: number;
+  expired_at: string;
+  description: string;
+}
+
 interface CreatedBy {
   _id: string;
   name: string;

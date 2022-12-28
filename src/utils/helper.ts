@@ -69,6 +69,30 @@ export const genderList = [
   },
 ];
 
+/* Job type data */
+export const jobTypeList = [
+  {
+    label: "Full time",
+    value: "Full time",
+  },
+  {
+    label: "Part-time",
+    value: "Part-time",
+  },
+];
+
+/* salary type data */
+export const salaryTypeList = [
+  {
+    label: "Yearly",
+    value: "yearly",
+  },
+  {
+    label: "Monthly",
+    value: "monthly",
+  },
+];
+
 /* Date parse conversion */
 export const dateparse = (date: any) => {
   const zeroFill = (i: any) => {

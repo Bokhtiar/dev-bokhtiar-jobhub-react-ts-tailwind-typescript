@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Header } from "components/header";
 import { IJobList } from "types/job.types";
 import { JobCard } from "components/job-card";
 import { NetworkServices } from "network";
-import { networkErrorHandeller } from "utils/helper";
+import { getToken, networkErrorHandeller } from "utils/helper";
 import { JobListPreloader } from "components/preloader";
 import { PrimaryButton, PrimaryOutlineButton } from "components/button";
 
 export const Home: React.FC = (): JSX.Element => {
+  const navigation = useNavigate();
   const [data, setData] = useState<IJobList[] | []>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
 
@@ -34,6 +35,16 @@ export const Home: React.FC = (): JSX.Element => {
   useEffect(() => {
     fetchData(1);
   }, [fetchData]);
+
+  /* handle navigation */
+  const handleNavigation = async (path: string) => {
+    const token = await getToken();
+    if (!token) {
+      navigation("/login");
+    } else {
+      navigation(path);
+    }
+  };
 
   return (
     <div>
@@ -83,15 +94,15 @@ export const Home: React.FC = (): JSX.Element => {
               <p className="text-white font-bold text-4xl lg:text-6xl mb-8">
                 Make a Difference with Your Online Resume!
               </p>
-              <Link to={"/"}>
-                <PrimaryOutlineButton
-                  type="button"
-                  size="lg"
-                  className="!text-white hover:!border-white"
-                >
-                  UPLOAD YOUR CV
-                </PrimaryOutlineButton>
-              </Link>
+
+              <PrimaryOutlineButton
+                type="button"
+                size="lg"
+                className="!text-white hover:!border-white"
+                onClick={() => handleNavigation("/dashboard/resume")}
+              >
+                UPLOAD YOUR CV
+              </PrimaryOutlineButton>
             </div>
           </div>
         </div>
@@ -119,11 +130,14 @@ export const Home: React.FC = (): JSX.Element => {
           labore mollit anim laborum suis aute.
         </p>
 
-        <Link to={"/"}>
-          <PrimaryButton type="button" size="lg" className="!px-12">
-            Post a Job
-          </PrimaryButton>
-        </Link>
+        <PrimaryButton
+          type="button"
+          size="lg"
+          className="!px-12"
+          onClick={() => handleNavigation("/dashboard/jobs/create")}
+        >
+          Post a Job
+        </PrimaryButton>
       </div>
     </div>
   );

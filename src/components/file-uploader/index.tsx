@@ -23,13 +23,13 @@ export const FileUploader: React.FC<PropsTypes> = (
       setLoading(true);
       const fileInfo = event.target.files[0];
       const formData = new FormData();
-      formData.append("image", fileInfo);
+      formData.append("document", fileInfo);
 
-      // const response = await NetworkServices.FileUpload.upload(formData);
-      // if (response && response.status === 200) {
-      //   setData(response.data.data);
-      //   props.onUploded(response.data.data);
-      // }
+      const response = await NetworkServices.PrivateFileUpload.upload(formData);
+      if (response && response.status === 200) {
+        setData(response.data.data);
+        props.onUploded(response.data.data);
+      }
       setLoading(false);
     } catch (error: any) {
       if (error) {

@@ -1,5 +1,5 @@
 import { privateRequest } from "config/axios.config";
-import { IJobStatus } from "types/job.types";
+import { IJobCreate, IJobStatus } from "types/job.types";
 import { PaginationParamsTypes } from "types/pagination.types";
 
 /* List of resources */
@@ -9,9 +9,19 @@ export const index = async (reqParams: PaginationParamsTypes) => {
   });
 };
 
+/* Store new resource */
+export const store = async (data: IJobCreate) => {
+  return await privateRequest.post(`/api/v1/user/job`, data);
+};
+
 /* Show specific resource */
 export const show = async (id: string) => {
   return await privateRequest.get(`/api/v1/user/job/${id}`);
+};
+
+/* Apply to specific resource */
+export const apply = async ({ job }: { job: string }) => {
+  return await privateRequest.post(`/api/v1/user/job/apply`, { job });
 };
 
 /* Show specific resource comments */

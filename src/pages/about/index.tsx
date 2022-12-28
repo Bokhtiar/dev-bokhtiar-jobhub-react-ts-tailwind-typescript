@@ -1,8 +1,21 @@
 import { PrimaryButton } from "components/button";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { getToken } from "utils/helper";
 import { Images } from "utils/images";
 
 export const About: React.FC = (): JSX.Element => {
+  const navigation = useNavigate();
+
+  /* handle navigation */
+  const handleNavigation = async (path: string) => {
+    const token = await getToken();
+    if (!token) {
+      navigation("/login");
+    } else {
+      navigation(path);
+    }
+  };
+
   return (
     <div>
       {/* Header */}
@@ -32,11 +45,14 @@ export const About: React.FC = (): JSX.Element => {
               incididbnt ut labore mollit anim laborum suis aute.
             </p>
 
-            <Link to={"/"}>
-              <PrimaryButton type="button" size="lg" className="!px-12">
-                Post a Job
-              </PrimaryButton>
-            </Link>
+            <PrimaryButton
+              type="button"
+              size="lg"
+              className="!px-12"
+              onClick={() => handleNavigation("/dashboard/jobs/create")}
+            >
+              Post a Job
+            </PrimaryButton>
           </div>
 
           <div className="text-center">

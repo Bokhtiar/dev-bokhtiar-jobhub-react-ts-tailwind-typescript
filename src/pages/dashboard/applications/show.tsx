@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { ICommentList } from "types/job.types";
 import { IApplication } from "types/application.types";
 import { NetworkServices } from "network";
 import { NoContent } from "components/204";
-import { Comment } from "components/comment";
 import { useParams } from "react-router-dom";
 import { NetworkError } from "components/501";
 import { FaMapMarkerAlt } from "react-icons/fa";
@@ -13,7 +11,6 @@ import { networkErrorHandeller, dateparse } from "utils/helper";
 export const ApplicationShow: React.FC = (): JSX.Element => {
   const { id } = useParams();
   const [data, setData] = useState<IApplication | null>(null);
-  const [comments, setComments] = useState<ICommentList[] | []>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [serverError, setServerError] = useState<boolean>(false);
 
@@ -21,17 +18,9 @@ export const ApplicationShow: React.FC = (): JSX.Element => {
   const fetchData = useCallback(async () => {
     try {
       const response = await NetworkServices.PrivateApplication.show(id || "");
-      const commentResponse = await NetworkServices.PrivateJob.comments(
-        id || ""
-      );
-      if (
-        response &&
-        commentResponse &&
-        response.status === 200 &&
-        commentResponse.status === 200
-      ) {
+
+      if (response && response.status === 200) {
         setData(response?.data?.data);
-        setComments(commentResponse?.data?.data);
       }
       setLoading(false);
     } catch (error: any) {
@@ -202,16 +191,6 @@ export const ApplicationShow: React.FC = (): JSX.Element => {
           </div>
         </div>
       ) : null}
-
-      {/* Comments */}
-      <p className="text-gray-400 font-bold mt-8">
-        Comments ({comments?.length || 0})
-      </p>
-      {!isLoading && !serverError && comments
-        ? comments.map((item, i) => {
-            return <Comment key={i} data={item} />;
-          })
-        : null}
     </div>
   );
 };

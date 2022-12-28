@@ -1,14 +1,43 @@
+import { useCallback, useEffect, useState } from "react";
 import { Images } from "utils/images";
 import { Link } from "react-router-dom";
 import { HiMenuAlt1 } from "react-icons/hi";
+import { IProfile } from "types/profile.types";
 import { useNavigate } from "react-router-dom";
 import { getToken, removeToken } from "utils/helper";
 import { Button, Dropdown, Menu, Navbar } from "react-daisyui";
 import { PrimaryButton, PrimaryOutlineButton } from "components/button";
+import { NetworkServices } from "network";
+import { SidebarDrawer } from "components/drawer/sidebar";
 
 export const MainNavbar: React.FC = (): JSX.Element => {
-  const navigate = useNavigate();
   const token = getToken();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState<boolean>(false);
+  const [data, setData] = useState<IProfile | null>(null);
+  const [isLoading, setLoading] = useState<boolean>(true);
+
+  /* Fetch data */
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await NetworkServices.PrivateProfile.me();
+      if (response && response.status === 200) {
+        setData(response?.data?.data);
+      }
+      setLoading(false);
+    } catch (error: any) {
+      if (error) {
+        setLoading(false);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  /* handle toggle */
+  const handleSidebar = () => setOpen(!open);
 
   /* handle logout */
   const handleLogout = async () => {
@@ -26,6 +55,7 @@ export const MainNavbar: React.FC = (): JSX.Element => {
               <Button
                 color="ghost"
                 className="lg:hidden rounded-full px-[10px] py-2"
+                onClick={handleSidebar}
               >
                 <HiMenuAlt1 size={25} />
               </Button>
@@ -76,10 +106,12 @@ export const MainNavbar: React.FC = (): JSX.Element => {
               <Dropdown vertical="end">
                 <Button color="ghost" className="avatar" shape="circle">
                   <div className="w-10 rounded-full">
-                    <img
-                      src="https://api.lorem.space/image/face?hash=33791"
-                      alt="User avatar"
-                    />
+                    {!isLoading && data ? (
+                      <img
+                        src={data.profile_image || Images.Avatar}
+                        alt="User avatar"
+                      />
+                    ) : null}
                   </div>
                 </Button>
                 <Dropdown.Menu className="w-52 menu-compact">
@@ -96,6 +128,9 @@ export const MainNavbar: React.FC = (): JSX.Element => {
           ) : null}
         </Navbar>
       </div>
+
+      {/* Sidebar drawer */}
+      <SidebarDrawer show={open} onClick={handleSidebar} />
     </div>
   );
 };
