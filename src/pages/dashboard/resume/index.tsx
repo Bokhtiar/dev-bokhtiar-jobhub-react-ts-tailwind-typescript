@@ -94,7 +94,14 @@ export const ResumrIndex: React.FC = (): JSX.Element => {
       ) : null}
 
       {/* Resume add modal */}
-      <ResumeAddModal visible={visible} toggleVisible={handleResumeAddModal} />
+      <ResumeAddModal
+        visible={visible}
+        toggleVisible={() => {
+          setData(null);
+          fetchData();
+          handleResumeAddModal();
+        }}
+      />
     </div>
   );
 };

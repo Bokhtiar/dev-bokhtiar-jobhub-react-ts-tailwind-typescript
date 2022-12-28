@@ -4,7 +4,9 @@ import { VscClose } from "react-icons/vsc";
 import { Toastify } from "components/toastify";
 import { PrimaryButton } from "components/button";
 import { networkErrorHandeller } from "utils/helper";
-import { Modal, Button, FileInput } from "react-daisyui";
+import { FileUploader } from "components/file-uploader";
+import { Modal, Button } from "react-daisyui";
+import { NetworkServices } from "network";
 
 type PropsTypes = {
   visible: boolean;
@@ -25,7 +27,7 @@ export const ResumeAddModal: React.FC<PropsTypes> = (
   const [isLoading, setLoading] = useState<boolean>(false);
 
   /* Handle set value */
-  const handleSetValue = ({ key, value }: { key: string; value: any }) => {
+  const handleSetValue = ({ key, value }: { key: string; value: string }) => {
     setValue(`${key}`, value);
     clearErrors(key);
   };
@@ -47,15 +49,18 @@ export const ResumeAddModal: React.FC<PropsTypes> = (
       }
 
       setLoading(true);
-      const formData = new FormData();
-      formData.append("resume", data.resume);
+      const formData = { resume: data.resume };
+      const response = await NetworkServices.PrivateProfile.addResume({
+        data: formData,
+      });
 
-      setTimeout(() => {
-        setLoading(false);
-        Toastify.Info("File upload inprogress.");
-        reset();
-        props.toggleVisible();
-      }, 2000);
+      if (response && response.status === 200) {
+        Toastify.Success(response.data.message);
+      }
+
+      setLoading(false);
+      reset();
+      props.toggleVisible();
     } catch (error: any) {
       if (error) {
         setLoading(false);
@@ -82,26 +87,21 @@ export const ResumeAddModal: React.FC<PropsTypes> = (
 
       <Modal.Body>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <label className="label">
-            {errors.resume && errors.resume.message ? (
-              <span className="label-text text-danger">File is required.</span>
-            ) : (
-              <span className="label-text">Select a file</span>
-            )}
-          </label>
-          <FileInput
-            className="shadow-none"
-            onChange={(event) =>
-              handleSetValue({
-                key: "resume",
-                value: event.target.files ? event.target.files[0] : null,
-              })
-            }
-          />
+          <div className="mb-4">
+            <FileUploader
+              defaultValue={null}
+              error={errors.resume && errors.resume.message}
+              onUploded={(data) =>
+                handleSetValue({ key: "resume", value: data })
+              }
+            />
+          </div>
 
-          <PrimaryButton type="submit" size="md" disabled={isLoading}>
-            {isLoading ? "Uploading..." : "Upload"}
-          </PrimaryButton>
+          <div className="text-right">
+            <PrimaryButton type="submit" size="md" disabled={isLoading}>
+              {isLoading ? "Uploading..." : "Upload"}
+            </PrimaryButton>
+          </div>
         </form>
       </Modal.Body>
     </Modal>

@@ -4,6 +4,7 @@ import { BiCheckDouble } from "react-icons/bi";
 import { VscCloudUpload } from "react-icons/vsc";
 import { networkErrorHandeller } from "utils/helper";
 import { NetworkServices } from "network";
+import { Images } from "utils/images";
 
 type PropsTypes = {
   error: any;
@@ -52,11 +53,10 @@ export const FileUploader: React.FC<PropsTypes> = (
       {!isLoading && !data ? (
         <label className="w-full h-[119px] flex flex-col items-center px-4 py-7 bg-white text-gray-400 transition-all hover:text-gray-500 cursor-pointer ">
           <VscCloudUpload size={35} />
-          <span className="mt-2 text-sm">Select an image</span>
+          <span className="mt-2 text-sm">Choose a file.</span>
           <input
             type="file"
             className="hidden"
-            accept="image/*"
             onChange={(event) => handleUpload(event)}
           />
         </label>
@@ -74,7 +74,7 @@ export const FileUploader: React.FC<PropsTypes> = (
         <div className="w-full flex px-4 py-7 h-[119px]">
           <div className="min-w-[63px]">
             <img
-              src={data}
+              src={Images.Avatar}
               alt="User avatar"
               className="w-[63px] h-[63px] rounded-full"
             />
@@ -82,7 +82,7 @@ export const FileUploader: React.FC<PropsTypes> = (
           <div className="grow overflow-hidden pl-2">
             <div className="inline-flex">
               <BiCheckDouble size={18} className="text-green-700" />
-              <p className="text-xs text-gray-500">Image uploaded</p>
+              <p className="text-xs text-gray-500">File uploaded</p>
             </div>
             <button
               type="button"

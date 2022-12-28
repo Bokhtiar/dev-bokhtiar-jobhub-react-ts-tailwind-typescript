@@ -6,6 +6,7 @@ import { Toastify } from "components/toastify";
 import { networkErrorHandeller } from "utils/helper";
 import { InputFormPreloader } from "components/preloader";
 import { ProfileForm } from "components/form/profile.form";
+import { FileUploader } from "components/file-uploader";
 
 export const ProfileEdit: React.FC = (): JSX.Element => {
   const [data, setData] = useState<IProfile | null>(null);
@@ -34,6 +35,22 @@ export const ProfileEdit: React.FC = (): JSX.Element => {
     fetchData();
   }, [fetchData]);
 
+  /* handle update profile image */
+  const handleUpdateImage = async (data: string) => {
+    try {
+      const formData = { image: data };
+      const response = await NetworkServices.PrivateProfile.changeProfileImage({
+        data: formData,
+      });
+
+      if (response && response.status === 200) {
+        Toastify.Success(response.data.message);
+      }
+    } catch (error: any) {
+      networkErrorHandeller(error);
+    }
+  };
+
   /* Handle updaet */
   const handleUpdate = async (data: any) => {
     try {
@@ -60,11 +77,20 @@ export const ProfileEdit: React.FC = (): JSX.Element => {
       {isLoading && !serverError && !data ? <InputFormPreloader /> : null}
       {!isLoading && !data && serverError ? <NetworkError /> : null}
       {!isLoading && !serverError && data ? (
-        <ProfileForm
-          data={data}
-          loading={isUpdating}
-          onSubmit={(data) => handleUpdate(data)}
-        />
+        <div>
+          <div className="mb-6 xl:mb-8 w-full sm:w-[250px]">
+            <FileUploader
+              defaultValue={null}
+              error={false}
+              onUploded={(data) => handleUpdateImage(data)}
+            />
+          </div>
+          <ProfileForm
+            data={data}
+            loading={isUpdating}
+            onSubmit={(data) => handleUpdate(data)}
+          />
+        </div>
       ) : null}
     </div>
   );
