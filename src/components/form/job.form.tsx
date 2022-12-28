@@ -45,6 +45,9 @@ export const JobForm: React.FC<PropsTypes> = (
       ...data,
       job_type: data.job_type.value,
       salary_type: data.salary_type.value,
+      start_salary: parseInt(data.start_salary),
+      end_salary: parseInt(data.end_salary),
+      vacancy: parseInt(data.vacancy),
     };
 
     props.onSubmit(formData);

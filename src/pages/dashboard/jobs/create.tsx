@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { NetworkServices } from "network";
+import { Toastify } from "components/toastify";
 import { JobForm } from "components/form/job.form";
 import { networkErrorHandeller } from "utils/helper";
 
@@ -9,11 +11,11 @@ export const JobCreate: React.FC = (): JSX.Element => {
   const handleSubmit = async (data: any) => {
     try {
       setLoading(true);
-      console.log(data);
-
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
+      const response = await NetworkServices.PrivateJob.store(data);
+      if (response && response.status === 201) {
+        Toastify.Success(response.data.message);
+      }
+      setLoading(false);
     } catch (error: any) {
       if (error) {
         setLoading(false);
